@@ -4,4 +4,7 @@ venv/
 .idea
 *.pyc
 *.swp
+*.json*
+.claude
+
 
