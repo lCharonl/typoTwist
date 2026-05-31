@@ -1,0 +1,160 @@
+# =============================================================================
+# Seed de domaines à haute valeur d'usurpation — contexte France
+# Pour dnstwist_batch.py : les lignes "#" sont ignorées (read_domains).
+# Principe : précision > volume. Uniquement des cibles réelles, réellement
+# usurpées en phishing. Pas de remplissage.
+# =============================================================================
+
+# --- Banques ---
+bnpparibas.fr
+societegenerale.fr
+credit-agricole.fr
+lcl.fr
+labanquepostale.fr
+caisse-epargne.fr
+banquepopulaire.fr
+creditmutuel.fr
+cic.fr
+boursorama.com
+boursobank.com
+hellobank.fr
+fortuneo.fr
+monabanq.com
+bforbank.com
+axabanque.fr
+n26.com
+revolut.com
+
+# --- État / Administrations (très forts vecteurs : impôts, santé, amendes, CPF) ---
+impots.gouv.fr
+ameli.fr
+service-public.fr
+caf.fr
+francetravail.fr
+pole-emploi.fr
+urssaf.fr
+laposte.fr
+ants.gouv.fr
+antai.gouv.fr
+amendes.gouv.fr
+moncompteformation.gouv.fr
+demarches-simplifiees.fr
+mesdroitssociaux.gouv.fr
+msa.fr
+
+# --- Mail / FAI ---
+gmail.com
+google.com
+outlook.com
+hotmail.fr
+live.com
+yahoo.fr
+orange.fr
+free.fr
+sfr.fr
+bouyguestelecom.fr
+wanadoo.fr
+laposte.net
+icloud.com
+proton.me
+
+# --- Paiement ---
+paypal.com
+paypal.fr
+stripe.com
+visa.fr
+mastercard.fr
+americanexpress.com
+lydia-app.com
+paylib.fr
+sumup.com
+klarna.com
+
+# --- E-commerce (leboncoin/vinted = cibles majeures en France) ---
+amazon.fr
+amazon.com
+cdiscount.com
+fnac.com
+darty.com
+leboncoin.fr
+vinted.fr
+aliexpress.com
+ebay.fr
+laredoute.fr
+veepee.fr
+zalando.fr
+shein.com
+temu.com
+backmarket.fr
+manomano.fr
+decathlon.fr
+conforama.fr
+but.fr
+ikea.fr
+
+# --- Livraison / Colis (phishing "colis bloqué" = volume énorme) ---
+chronopost.fr
+colissimo.fr
+mondialrelay.fr
+dpd.fr
+ups.com
+fedex.com
+dhl.fr
+gls-group.com
+relaiscolis.com
+tnt.com
+
+# --- Énergie / Utilities (phishing facture / remboursement) ---
+edf.fr
+engie.fr
+totalenergies.fr
+veolia.fr
+suez.fr
+
+# --- Assurance / Mutuelles ---
+maif.fr
+macif.fr
+matmut.fr
+groupama.fr
+axa.fr
+allianz.fr
+maaf.fr
+gmf.fr
+harmonie-mutuelle.fr
+mgen.fr
+
+# --- Réseaux sociaux / Tech grand public ---
+facebook.com
+instagram.com
+whatsapp.com
+x.com
+twitter.com
+linkedin.com
+tiktok.com
+snapchat.com
+youtube.com
+netflix.com
+apple.com
+microsoft.com
+discord.com
+
+# --- SaaS / Cloud / Pro (compromission de comptes pro, docusign/wetransfer) ---
+office365.com
+microsoftonline.com
+office.com
+sharepoint.com
+dropbox.com
+docusign.net
+adobe.com
+salesforce.com
+slack.com
+zoom.us
+wetransfer.com
+
+# --- Crypto (ledger = cible française très ciblée) ---
+binance.com
+coinbase.com
+kraken.com
+ledger.com
+metamask.io
+crypto.com

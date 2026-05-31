@@ -58,6 +58,8 @@ def read_domains(filepath):
         for row in csv.reader(f):
             if not row:
                 continue
+            if row[0].lstrip().startswith('#'):
+                continue
             domain = row[-1].strip()
             if domain and not domain.startswith('#') and not domain.isdigit():
                 domains.append(domain)
