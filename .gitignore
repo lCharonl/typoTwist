@@ -1,5 +1,7 @@
 venv/
+.venv
 # PyCharm project directory
 .idea
 *.pyc
 *.swp
+
