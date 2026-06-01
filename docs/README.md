@@ -1,5 +1,117 @@
+typoTwist
+=========
+
+**typoTwist** is a *threat-intelligence-at-scale* layer built on top of
+[`dnstwist`](https://github.com/elceef/dnstwist) (Marcin Ulikowski). Where
+`dnstwist` analyses one domain at a time, typoTwist adds:
+
+- **a batch engine** — `dnstwist_batch.py` scans **thousands** of domains from a
+  simple CSV file ([Tranco](https://tranco-list.eu/) lists, or a *seed* of
+  high-value impersonation targets);
+- **a robust pipeline** — parallel workers, **JSONL + `.idx` index** output, and
+  **automatic resume** after an interruption (`Ctrl-C` with no data loss);
+- **a France seed** — `domains_csv/seed_domains_fr.csv`: banks, tax/government,
+  parcel delivery, e-commerce, energy, insurance… (principle: *precision > volume*);
+- **a web viewer** — `viewer.py` to explore the hundreds of thousands of
+  generated permutations without loading the whole file into memory;
+- **recording-friendly output** — a banner, one line per domain as it completes
+  (registered lookalikes · mail servers · parked domains), and a colored
+  threat-intel summary.
+
+> typoTwist does not replace `dnstwist`: it orchestrates it. All credit for the
+> fuzzing engine goes to the upstream project, documented below.
+
+
+Requirements
+------------
+
+DNS-mode scans need DNSPython. Use the bundled virtualenv (or install the
+requirements) before running anything that resolves DNS:
+
+```
+$ source .venv/bin/activate          # or: pip install -r requirements.txt
+```
+
+Without DNSPython, batch runs in any DNS mode stop early with a clear message
+(use `--no-dns` to generate permutations only, no resolution required).
+
+
+Batch — `dnstwist_batch.py`
+---------------------------
+
+Reads a CSV (one domain per line, or `rank,domain` like Tranco; lines starting
+with `#` are ignored), runs permutation generation/resolution for each domain,
+and writes the result as JSON Lines alongside an index.
+
+```
+$ python3 dnstwist_batch.py domains_csv/seed_domains_fr.csv -o output.jsonl --registered -W 4
+```
+
+Output (a pair of files):
+
+- `output.jsonl` — one JSON object per line: `{"domain": "...", "permutations": [...]}`
+- `output.jsonl.idx` — lightweight `domain⇥offset⇥permutation_count` index (fast
+  resume + on-demand loading by the viewer).
+
+**Resume**: re-running the same command automatically skips already-processed
+domains (via the `.idx`). Delete `output.jsonl` (and its `.idx`) to start over.
+
+Main options:
+
+| Option | Effect |
+|---|---|
+| `-o, --output FILE` | Output JSONL file (`.idx` created automatically) — **required** |
+| `-W, --workers N` | Parallel worker processes (default: 1) |
+| `--no-dns` | Generate permutations only, no DNS resolution (recommended for very large runs) |
+| `-r, --registered` | Keep only **registered** domains |
+| `-u, --unregistered` | Keep only **unregistered** domains |
+| `--fuzzers LIST` | Comma-separated list of fuzzers (e.g. `homoglyph,hyphenation`) |
+| `-d, --dictionary FILE` | Extra permutations from a dictionary file |
+| `--tld FILE` | TLD-swap permutations |
+| `-m, --mxcheck` | Detect MX hosts able to intercept e-mail |
+| `-g, --geoip` | GeoIP country lookup for IPv4 |
+| `--lsh ALGO` | HTML similarity — `ssdeep` (default) or `tlsh` (phishing detection) |
+| `-w, --whois` | WHOIS lookup (registrar + creation date) |
+| `-t, --threads NUM` | DNS scanner threads per domain |
+| `--nameservers LIST` | DNS/DoH resolvers (comma-separated) |
+| `--no-color` | Disable ANSI colors in the output |
+
+Example output in `--registered` mode:
+
+```
+  ✔  chronopost.fr           44 lookalikes    44 with mail server     1 parked
+  ✔  edf.fr                  56 lookalikes    49 with mail server     8 parked
+
+  ──────────────────────────────────────────────
+  Summary  · 3m31s
+  scanned   : 10/10   0 error(s)
+  lookalikes: 246
+      ├─ with mail server (can receive e-mail) : 166
+      └─ parked (parking / resale)             : 41
+  output    : output.jsonl  (+ .idx)
+  ──────────────────────────────────────────────
+```
+
+
+Viewer — `viewer.py`
+--------------------
+
+Serves a web UI to browse a JSONL file of any size. If the `.idx` exists,
+domains and offsets are loaded from the index (fast); otherwise the JSONL is
+scanned once to build the index in memory.
+
+```
+$ python3 viewer.py output.jsonl          # http://127.0.0.1:8000
+$ python3 viewer.py output.jsonl -p 9000  # custom port
+```
+
+
+----------------------------------------------------------------------
+
+Upstream documentation — dnstwist
+=================================
+
 ![dnstwist](/docs/dnstwist.png)
-===============================
 
 See what sort of trouble users can get in trying to type your domain name.
 Find lookalike domains that adversaries can use to attack you. Can detect
